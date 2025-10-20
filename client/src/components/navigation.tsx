@@ -23,16 +23,15 @@ export function Navigation() {
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/">
-            <a
-              className="flex items-center gap-2 text-xl font-bold text-foreground"
-              data-testid="link-home"
-            >
-              <div className="rounded-lg bg-accent p-2">
-                <span className="text-accent-foreground">AI</span>
-              </div>
-              <span>AiRus</span>
-            </a>
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-xl font-bold text-foreground"
+            data-testid="link-home"
+          >
+            <div className="rounded-lg bg-accent p-2">
+              <span className="text-accent-foreground">AI</span>
+            </div>
+            <span>AiRus</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -41,20 +40,20 @@ export function Navigation() {
               const Icon = item.icon;
               const isActive = location === item.path;
               return (
-                <Link key={item.path} href={item.path}>
-                  <a
-                    className={cn(
-                      "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
-                      "hover-elevate active-elevate-2",
-                      isActive
-                        ? "border-b-2 border-accent text-accent"
-                        : "text-muted-foreground hover:text-foreground"
-                    )}
-                    data-testid={`link-${item.label.toLowerCase().replace(" ", "-")}`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    {item.label}
-                  </a>
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  className={cn(
+                    "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
+                    "hover-elevate active-elevate-2",
+                    isActive
+                      ? "border-b-2 border-accent text-accent"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                  data-testid={`link-${item.label.toLowerCase().replace(" ", "-")}`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {item.label}
                 </Link>
               );
             })}
@@ -73,20 +72,20 @@ export function Navigation() {
                   const Icon = item.icon;
                   const isActive = location === item.path;
                   return (
-                    <Link key={item.path} href={item.path}>
-                      <a
-                        className={cn(
-                          "flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-colors",
-                          "hover-elevate active-elevate-2",
-                          isActive
-                            ? "bg-accent/10 text-accent"
-                            : "text-muted-foreground hover:text-foreground"
-                        )}
-                        data-testid={`mobile-link-${item.label.toLowerCase().replace(" ", "-")}`}
-                      >
-                        <Icon className="h-5 w-5" />
-                        {item.label}
-                      </a>
+                    <Link
+                      key={item.path}
+                      href={item.path}
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-colors",
+                        "hover-elevate active-elevate-2",
+                        isActive
+                          ? "bg-accent/10 text-accent"
+                          : "text-muted-foreground hover:text-foreground"
+                      )}
+                      data-testid={`mobile-link-${item.label.toLowerCase().replace(" ", "-")}`}
+                    >
+                      <Icon className="h-5 w-5" />
+                      {item.label}
                     </Link>
                   );
                 })}
