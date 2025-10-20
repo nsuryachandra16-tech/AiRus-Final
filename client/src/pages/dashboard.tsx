@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { GlassCard } from "@/components/glass-card";
-import { ClipboardList, Clock, Calendar, TrendingUp, Sparkles } from "lucide-react";
+import { ClipboardList, Clock, Calendar, TrendingUp, Sparkles, Timer } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { format, formatDistanceToNow, isAfter, isBefore, addDays } from "date-fns";
@@ -196,6 +196,50 @@ export default function Dashboard() {
             </div>
           )}
         </GlassCard>
+
+        {/* Timetable Section */}
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {/* Upload Timetable Card */}
+          <GlassCard className="p-6 flex flex-col items-center justify-center text-center">
+            <Calendar className="h-16 w-16 text-accent mb-4" />
+            <h3 className="text-2xl font-semibold text-foreground mb-2">Upload Timetable</h3>
+            <p className="text-muted-foreground mb-6">AI will analyze your timetable for optimal scheduling.</p>
+            <label
+              htmlFor="upload-timetable"
+              className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full"
+            >
+              Upload Timetable File
+            </label>
+            <input
+              id="upload-timetable"
+              type="file"
+              className="sr-only"
+              accept=".pdf,.docx,.txt"
+              // Add upload and AI analysis logic here
+            />
+          </GlassCard>
+
+          {/* Upload Assignment Card */}
+          <GlassCard className="p-6 flex flex-col items-center justify-center text-center">
+            <ClipboardList className="h-16 w-16 text-accent mb-4" />
+            <h3 className="text-2xl font-semibold text-foreground mb-2">Upload Assignment</h3>
+            <p className="text-muted-foreground mb-6">Submit your assignments with ease.</p>
+            <label
+              htmlFor="upload-assignment"
+              className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full"
+            >
+              Upload Assignment File
+            </label>
+            <input
+              id="upload-assignment"
+              type="file"
+              className="sr-only"
+              accept=".pdf,.docx,.zip"
+              // Add assignment upload logic here
+            />
+          </GlassCard>
+        </div>
+
 
         {/* Footer Credit */}
         <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.5s' }}>

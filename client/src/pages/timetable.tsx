@@ -5,7 +5,7 @@ import { queryClient } from "@/lib/queryClient";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Upload, Calendar, FileText, Plus } from "lucide-react";
+import { Upload, Calendar, FileText, Plus, Sparkles, Clock, BookOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -129,33 +129,72 @@ export default function Timetable() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 md:px-8 relative z-10">
-        <div className="mb-8 flex items-center justify-between animate-fade-in-up">
-          <div>
-            <h1 className="text-5xl font-bold text-foreground mb-2" data-testid="text-page-title">
-              Timetable Manager
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Upload and manage your class schedule with <span className="text-accent font-medium">AI-powered scheduling</span> ✨
-            </p>
-          </div>
-          <div className="flex gap-3 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            <Dialog open={isUploadTimetableOpen} onOpenChange={setIsUploadTimetableOpen}>
-              <DialogTrigger asChild>
-                <Button className="gap-2 shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all duration-300 hover:scale-105" data-testid="button-upload-timetable">
-                  <Upload className="h-4 w-4" />
-                  Upload Timetable
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-card border-card-border sm:max-w-[500px]">
-                <DialogHeader>
-                  <DialogTitle>Upload Timetable</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    Upload an image of your timetable. Our AI will analyze it and automatically create your schedule.
+        <div className="mb-8 animate-fade-in-up">
+          <h1 className="text-5xl font-bold text-foreground mb-2" data-testid="text-page-title">
+            Timetable Manager
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            Upload and manage your class schedule with <span className="text-accent font-medium">AI-powered scheduling</span> ✨
+          </p>
+        </div>
+
+        {/* Upload Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {/* Upload Timetable Card */}
+          <Dialog open={isUploadTimetableOpen} onOpenChange={setIsUploadTimetableOpen}>
+            <DialogTrigger asChild>
+              <div 
+                className="group relative overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-accent/5 to-transparent p-8 cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-accent/20 hover:border-accent/40 animate-fade-in-up"
+                style={{ animationDelay: '0.1s' }}
+              >
+                {/* Animated shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                </div>
+
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="p-4 bg-accent/20 rounded-2xl border border-accent/30 group-hover:scale-110 transition-transform duration-300">
+                      <Calendar className="h-8 w-8 text-accent" />
+                    </div>
+                    <Sparkles className="h-6 w-6 text-accent/50 animate-pulse" />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
+                    Upload Timetable
+                  </h3>
+                  
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    Upload your class schedule image and let our AI analyze it to automatically create your personalized timetable
                   </p>
-                  <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-white/10 p-8">
-                    <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
+
+                  <div className="flex items-center gap-2 text-sm text-accent font-medium">
+                    <Upload className="h-4 w-4" />
+                    <span>Click to upload</span>
+                  </div>
+                </div>
+
+                {/* Bottom gradient line */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+            </DialogTrigger>
+            
+            <DialogContent className="bg-card border-accent/20 sm:max-w-[500px] rounded-3xl">
+              <DialogHeader>
+                <DialogTitle className="text-2xl flex items-center gap-2">
+                  <Calendar className="h-6 w-6 text-accent" />
+                  Upload Timetable
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6">
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Upload an image of your timetable. Our AI will analyze it and automatically create your schedule with all class timings and subjects.
+                </p>
+                <div className="relative group">
+                  <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-accent/30 bg-accent/5 p-10 transition-all duration-300 hover:border-accent/50 hover:bg-accent/10">
+                    <div className="p-4 bg-accent/20 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <Calendar className="h-10 w-10 text-accent" />
+                    </div>
                     <input
                       type="file"
                       accept="image/*"
@@ -165,48 +204,108 @@ export default function Timetable() {
                     />
                     <label
                       htmlFor="timetable-upload"
-                      className="cursor-pointer text-sm text-accent hover:text-accent-hover"
+                      className="cursor-pointer text-center"
                     >
-                      {timetableFile ? timetableFile.name : "Click to select image"}
+                      {timetableFile ? (
+                        <div className="space-y-2">
+                          <p className="text-accent font-medium">{timetableFile.name}</p>
+                          <p className="text-xs text-muted-foreground">Click to change</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <p className="text-accent font-medium">Click to select image</p>
+                          <p className="text-xs text-muted-foreground">Supports JPG, PNG, JPEG</p>
+                        </div>
+                      )}
                     </label>
                   </div>
-                  <div className="flex justify-end gap-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsUploadTimetableOpen(false)}
-                      disabled={uploading}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={handleTimetableUpload}
-                      disabled={!timetableFile || uploading}
-                    >
-                      {uploading ? "Analyzing..." : "Upload & Analyze"}
-                    </Button>
+                </div>
+                <div className="flex justify-end gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsUploadTimetableOpen(false)}
+                    disabled={uploading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleTimetableUpload}
+                    disabled={!timetableFile || uploading}
+                    className="gap-2"
+                  >
+                    {uploading ? (
+                      <>
+                        <div className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin"></div>
+                        Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4" />
+                        Upload & Analyze
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Upload Assignment Card */}
+          <Dialog open={isUploadAssignmentOpen} onOpenChange={setIsUploadAssignmentOpen}>
+            <DialogTrigger asChild>
+              <div 
+                className="group relative overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-accent/10 via-accent/5 to-transparent p-8 cursor-pointer transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-accent/20 hover:border-accent/40 animate-fade-in-up"
+                style={{ animationDelay: '0.2s' }}
+              >
+                {/* Animated shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-accent/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                </div>
+
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="p-4 bg-accent/20 rounded-2xl border border-accent/30 group-hover:scale-110 transition-transform duration-300">
+                      <FileText className="h-8 w-8 text-accent" />
+                    </div>
+                    <Sparkles className="h-6 w-6 text-accent/50 animate-pulse" />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors duration-300">
+                    Upload Assignment
+                  </h3>
+                  
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                    Upload your assignment details and AI will automatically schedule work sessions in your free time slots
+                  </p>
+
+                  <div className="flex items-center gap-2 text-sm text-accent font-medium">
+                    <Upload className="h-4 w-4" />
+                    <span>Click to upload</span>
                   </div>
                 </div>
-              </DialogContent>
-            </Dialog>
 
-            <Dialog open={isUploadAssignmentOpen} onOpenChange={setIsUploadAssignmentOpen}>
-              <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2" data-testid="button-upload-assignment">
-                  <FileText className="h-4 w-4" />
+                {/* Bottom gradient line */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+            </DialogTrigger>
+            
+            <DialogContent className="bg-card border-accent/20 sm:max-w-[500px] rounded-3xl">
+              <DialogHeader>
+                <DialogTitle className="text-2xl flex items-center gap-2">
+                  <FileText className="h-6 w-6 text-accent" />
                   Upload Assignment
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-card border-card-border sm:max-w-[500px]">
-                <DialogHeader>
-                  <DialogTitle>Upload Assignment Work</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    Upload an image of your assignment. AI will analyze it and auto-schedule work sessions in your free slots.
-                  </p>
-                  <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-white/10 p-8">
-                    <FileText className="h-12 w-12 text-muted-foreground mb-4" />
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6">
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Upload an image of your assignment. AI will analyze the requirements and auto-schedule work sessions in your available free slots.
+                </p>
+                <div className="relative group">
+                  <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-accent/30 bg-accent/5 p-10 transition-all duration-300 hover:border-accent/50 hover:bg-accent/10">
+                    <div className="p-4 bg-accent/20 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <FileText className="h-10 w-10 text-accent" />
+                    </div>
                     <input
                       type="file"
                       accept="image/*"
@@ -216,38 +315,59 @@ export default function Timetable() {
                     />
                     <label
                       htmlFor="assignment-upload"
-                      className="cursor-pointer text-sm text-accent hover:text-accent-hover"
+                      className="cursor-pointer text-center"
                     >
-                      {assignmentFile ? assignmentFile.name : "Click to select image"}
+                      {assignmentFile ? (
+                        <div className="space-y-2">
+                          <p className="text-accent font-medium">{assignmentFile.name}</p>
+                          <p className="text-xs text-muted-foreground">Click to change</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <p className="text-accent font-medium">Click to select image</p>
+                          <p className="text-xs text-muted-foreground">Supports JPG, PNG, JPEG</p>
+                        </div>
+                      )}
                     </label>
                   </div>
-                  <div className="flex justify-end gap-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsUploadAssignmentOpen(false)}
-                      disabled={uploading}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={handleAssignmentUpload}
-                      disabled={!assignmentFile || uploading}
-                    >
-                      {uploading ? "Processing..." : "Upload & Schedule"}
-                    </Button>
-                  </div>
                 </div>
-              </DialogContent>
-            </Dialog>
-          </div>
+                <div className="flex justify-end gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsUploadAssignmentOpen(false)}
+                    disabled={uploading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleAssignmentUpload}
+                    disabled={!assignmentFile || uploading}
+                    className="gap-2"
+                  >
+                    {uploading ? (
+                      <>
+                        <div className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4" />
+                        Upload & Schedule
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Today's Schedule */}
-        <GlassCard className="mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <GlassCard className="mb-6 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center gap-3 mb-6">
             <div className="p-3 bg-accent/10 rounded-2xl border border-accent/20">
-              <Calendar className="h-6 w-6 text-accent" />
+              <Clock className="h-6 w-6 text-accent" />
             </div>
             <div>
               <h2 className="text-2xl font-semibold text-foreground">
@@ -275,7 +395,7 @@ export default function Timetable() {
                     style={{ 
                       borderLeftColor: event.color || 'hsl(var(--accent))', 
                       borderLeftWidth: '4px',
-                      animationDelay: `${0.3 + index * 0.1}s`
+                      animationDelay: `${0.4 + index * 0.1}s`
                     }}
                   >
                     <div className="flex-1">
@@ -295,21 +415,21 @@ export default function Timetable() {
 
         {/* Timetable Status */}
         {timetableData && (
-          <GlassCard className="animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          <GlassCard className="animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
             <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
               Timetable Status
             </h2>
             <div className="space-y-3">
-              <div className="flex justify-between items-center p-3 bg-accent/5 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-accent/5 rounded-lg border border-accent/10">
                 <span className="text-sm text-muted-foreground">Last uploaded</span>
                 <span className="text-sm font-medium text-accent">{new Date(timetableData.uploadedAt).toLocaleDateString()}</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-accent/5 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-accent/5 rounded-lg border border-accent/10">
                 <span className="text-sm text-muted-foreground">Total classes</span>
                 <span className="text-sm font-medium text-accent">{timetableData.totalClasses || 0}</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-accent/5 rounded-lg">
+              <div className="flex justify-between items-center p-3 bg-accent/5 rounded-lg border border-accent/10">
                 <span className="text-sm text-muted-foreground">Free slots available</span>
                 <span className="text-sm font-medium text-accent">{timetableData.freeSlots || 0}</span>
               </div>
@@ -318,7 +438,7 @@ export default function Timetable() {
         )}
 
         {/* Footer Credit */}
-        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.6s' }}>
           <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
             Crafted with <span className="text-red-500 animate-pulse">❤️</span> by Surya
           </p>
