@@ -15,6 +15,10 @@ export default function Dashboard() {
     queryKey: ["/api/study-sessions"],
   });
 
+  const { data: scheduleEvents = [] } = useQuery({
+    queryKey: ["/api/schedule"],
+  });
+
   const upcomingAssignments = assignments
     .filter((a) => !a.completed && isAfter(new Date(a.dueDate), new Date()))
     .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
@@ -29,6 +33,27 @@ export default function Dashboard() {
   const totalStudyMinutes = studySessions
     .filter((s) => s.sessionType === "work")
     .reduce((sum, s) => sum + s.duration, 0);
+
+  // Real-time class tracking
+  const now = new Date();
+  const currentDay = now.getDay();
+  const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  
+  const todayClasses = scheduleEvents
+    .filter((event: any) => event.dayOfWeek === currentDay)
+    .sort((a: any, b: any) => a.startTime.localeCompare(b.startTime));
+
+  const currentClass = todayClasses.find((event: any) => 
+    currentTime >= event.startTime && currentTime <= event.endTime
+  );
+
+  const upcomingClasses = todayClasses.filter((event: any) => 
+    currentTime < event.startTime
+  );
+
+  const completedClasses = todayClasses.filter((event: any) => 
+    currentTime > event.endTime
+  );
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -202,48 +227,98 @@ export default function Dashboard() {
           )}
         </GlassCard>
 
-        {/* Timetable Section */}
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {/* Upload Timetable Card */}
-          <GlassCard className="p-6 flex flex-col items-center justify-center text-center">
-            <Calendar className="h-16 w-16 text-accent mb-4" />
-            <h3 className="text-2xl font-semibold text-foreground mb-2">Upload Timetable</h3>
-            <p className="text-muted-foreground mb-6">AI will analyze your timetable for optimal scheduling.</p>
-            <label
-              htmlFor="upload-timetable"
-              className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full"
-            >
-              Upload Timetable File
-            </label>
-            <input
-              id="upload-timetable"
-              type="file"
-              className="sr-only"
-              accept=".pdf,.docx,.txt"
-              // Add upload and AI analysis logic here
-            />
-          </GlassCard>
+        {/* Today's Classes Status */}
+        {todayClasses.length > 0 && (
+          <GlassCard className="mt-8 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-accent/10 rounded-2xl border border-accent/20">
+                <Calendar className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold text-foreground">
+                  Today is {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][currentDay]}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {todayClasses.length} classes scheduled
+                </p>
+              </div>
+            </div>
 
-          {/* Upload Assignment Card */}
-          <GlassCard className="p-6 flex flex-col items-center justify-center text-center">
-            <ClipboardList className="h-16 w-16 text-accent mb-4" />
-            <h3 className="text-2xl font-semibold text-foreground mb-2">Upload Assignment</h3>
-            <p className="text-muted-foreground mb-6">Submit your assignments with ease.</p>
-            <label
-              htmlFor="upload-assignment"
-              className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 w-full"
-            >
-              Upload Assignment File
-            </label>
-            <input
-              id="upload-assignment"
-              type="file"
-              className="sr-only"
-              accept=".pdf,.docx,.zip"
-              // Add assignment upload logic here
-            />
+            {/* Current Class */}
+            {currentClass && (
+              <div className="mb-6 p-6 rounded-2xl bg-gradient-to-br from-green-500/20 via-green-500/10 to-transparent border-2 border-green-500/30 animate-pulse-slow">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-medium text-green-400">CLASS IN PROGRESS</span>
+                </div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">{currentClass.courseName}</h3>
+                <p className="text-accent font-mono text-lg">
+                  {currentClass.startTime} - {currentClass.endTime}
+                </p>
+                {currentClass.location && (
+                  <p className="text-sm text-muted-foreground mt-2">📍 {currentClass.location}</p>
+                )}
+              </div>
+            )}
+
+            {/* Upcoming Classes */}
+            {upcomingClasses.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-blue-400" />
+                  Classes Not Yet Started ({upcomingClasses.length})
+                </h3>
+                <div className="space-y-3">
+                  {upcomingClasses.map((event: any) => (
+                    <div
+                      key={event.id}
+                      className="flex items-center gap-4 rounded-xl border border-blue-500/20 p-4 bg-gradient-to-r from-blue-500/10 to-transparent hover:border-blue-500/40 transition-all duration-300"
+                      style={{ borderLeftWidth: '4px', borderLeftColor: event.color }}
+                    >
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground">{event.courseName}</h4>
+                        <p className="text-sm text-blue-400 font-mono mt-1">
+                          {event.startTime} - {event.endTime}
+                        </p>
+                        {event.location && (
+                          <p className="text-xs text-muted-foreground mt-1">📍 {event.location}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Completed Classes */}
+            {completedClasses.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-gray-500/20 flex items-center justify-center">
+                    <span className="text-xs">✓</span>
+                  </div>
+                  Classes Ended ({completedClasses.length})
+                </h3>
+                <div className="space-y-2">
+                  {completedClasses.map((event: any) => (
+                    <div
+                      key={event.id}
+                      className="flex items-center gap-4 rounded-xl border border-white/5 p-3 bg-white/5 opacity-60"
+                      style={{ borderLeftWidth: '3px', borderLeftColor: event.color }}
+                    >
+                      <div className="flex-1">
+                        <h4 className="font-medium text-muted-foreground line-through">{event.courseName}</h4>
+                        <p className="text-xs text-muted-foreground font-mono">
+                          {event.startTime} - {event.endTime}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </GlassCard>
-        </div>
+        )}
 
 
         {/* Footer Credit */}

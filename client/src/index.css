@@ -192,18 +192,64 @@
   --chart-2: 142 71% 55%;
   --chart-3: 38 92% 58%;
   --chart-4: 280 75% 65%;
-  --chart-5: 0 84% 60%;
-
-  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.40);
-  --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.45);
-  --shadow-sm: 0px 2px 4px -1px hsl(0 0% 0% / 0.50), 0px 1px 2px -1px hsl(0 0% 0% / 0.40);
-  --shadow: 0px 4px 6px -1px hsl(0 0% 0% / 0.55), 0px 2px 4px -2px hsl(0 0% 0% / 0.45);
-  --shadow-md: 0px 6px 12px -2px hsl(0 0% 0% / 0.60), 0px 3px 6px -3px hsl(0 0% 0% / 0.50);
-  --shadow-lg: 0px 10px 20px -4px hsl(0 0% 0% / 0.65), 0px 4px 8px -4px hsl(0 0% 0% / 0.55);
-  --shadow-xl: 0px 20px 30px -6px hsl(0 0% 0% / 0.70), 0px 8px 12px -6px hsl(0 0% 0% / 0.60);
-  --shadow-2xl: 0px 30px 50px -8px hsl(0 0% 0% / 0.80);
-
+  --chart-5: 27 87% 67%;
+  }
 }
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .glass-card {
+    padding: 1rem !important;
+  }
+}
+
+/* Animation for mobile menu */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.2s ease-out;
+}
+
+/* Pulse animations */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-pulse-slow-delay {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 1.5s;
+}
+
 
 @layer base {
   * {

@@ -130,31 +130,52 @@ Use these colors in order: #facc15, #60a5fa, #f87171, #34d399, #a78bfa, #fb923c`
 
 export async function analyzeAssignmentImage(imageData: any): Promise<{
   title: string;
-  course: string;
+  course?: string;
   description: string;
-  dueDate: Date;
-  priority: string;
+  dueDate?: Date;
+  priority?: string;
 }> {
   try {
-    const systemPrompt = `Analyze this assignment image and extract the assignment details.
-Return a JSON object with:
-- title: assignment title
-- course: course name
-- description: assignment description
-- dueDate: due date (ISO format)
-- priority: low, medium, or high`;
+    const systemPrompt = `You are an expert assignment analyzer. Extract assignment details with 100% accuracy.
+
+REQUIREMENTS:
+1. Read the assignment title EXACTLY as written
+2. Identify the course/subject name
+3. Extract complete description/requirements
+4. Find the due date (return in ISO format YYYY-MM-DD)
+5. Determine priority: "high" if urgent/soon, "medium" if moderate time, "low" if far future
+
+Return ONLY valid JSON:
+{
+  "title": "Exact assignment title",
+  "course": "Subject/Course name",
+  "description": "Full assignment description and requirements",
+  "dueDate": "2025-01-25T23:59:00.000Z",
+  "priority": "high"
+}
+
+BE PRECISE. Read all text carefully.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.0-flash-exp",
       config: {
         systemInstruction: systemPrompt,
         responseMimeType: "application/json",
+        temperature: 0.1,
       },
       contents: [
         {
           role: "user",
           parts: [
-            { text: "Analyze this assignment and extract the details." },
+            {
+              inlineData: {
+                mimeType: "image/jpeg",
+                data: imageData.toString('base64')
+              }
+            },
+            {
+              text: "Analyze this assignment image. Extract title, course, description, due date, and priority with 100% accuracy."
+            },
           ],
         },
       ],
@@ -163,9 +184,9 @@ Return a JSON object with:
     const result = JSON.parse(response.text || "{}");
     return {
       title: result.title || "Untitled Assignment",
-      course: result.course || "General",
+      course: result.course,
       description: result.description || "",
-      dueDate: new Date(result.dueDate || Date.now() + 7 * 24 * 60 * 60 * 1000),
+      dueDate: result.dueDate ? new Date(result.dueDate) : undefined,
       priority: result.priority || "medium",
     };
   } catch (error) {
