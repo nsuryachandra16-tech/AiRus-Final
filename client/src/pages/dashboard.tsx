@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { GlassCard } from "@/components/glass-card";
-import { ClipboardList, Clock, Calendar, TrendingUp, Sparkles, Timer } from "lucide-react";
+import { ClipboardList, Clock, Calendar, TrendingUp, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { format, formatDistanceToNow, isAfter, isBefore, addDays } from "date-fns";
@@ -161,7 +161,7 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className="rounded-lg bg-accent/10 p-3">
-                <Timer className="h-6 w-6 text-accent" />
+                <Clock className="h-6 w-6 text-accent" />
               </div>
             </div>
           </GlassCard>

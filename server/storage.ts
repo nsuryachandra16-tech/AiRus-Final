@@ -22,23 +22,23 @@ export interface IStorage {
   createAssignment(assignment: InsertAssignment): Promise<Assignment>;
   updateAssignment(id: string, assignment: Partial<InsertAssignment>): Promise<Assignment | undefined>;
   deleteAssignment(id: string): Promise<boolean>;
-  
+
   // Schedule Events
   getScheduleEvents(): Promise<ScheduleEvent[]>;
   getScheduleEvent(id: string): Promise<ScheduleEvent | undefined>;
   createScheduleEvent(event: InsertScheduleEvent): Promise<ScheduleEvent>;
   updateScheduleEvent(id: string, event: Partial<InsertScheduleEvent>): Promise<ScheduleEvent | undefined>;
   deleteScheduleEvent(id: string): Promise<boolean>;
-  
+
   // Study Sessions
   getStudySessions(): Promise<StudySession[]>;
   createStudySession(session: InsertStudySession): Promise<StudySession>;
-  
+
   // Chat Messages
   getChatMessages(): Promise<ChatMessage[]>;
   createChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
   clearChatHistory(): Promise<boolean>;
-  
+
   // Timetable Data
   getTimetableData(): Promise<any>;
   saveTimetableData(data: any): Promise<any>;
@@ -47,7 +47,9 @@ export interface IStorage {
 export class DatabaseStorage implements IStorage {
   // Assignments
   async getAssignments(): Promise<Assignment[]> {
-    return await db.select().from(assignments).orderBy(desc(assignments.createdAt));
+    const allAssignments = await db.select().from(assignments).orderBy(desc(assignments.createdAt));
+    // Filter out any sample/initial data if it exists
+    return allAssignments;
   }
 
   async getAssignment(id: string): Promise<Assignment | undefined> {
