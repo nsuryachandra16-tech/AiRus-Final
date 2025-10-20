@@ -33,13 +33,20 @@ export function Navigation({ userName }: NavigationProps) {
             className="flex items-center gap-3 text-xl font-bold text-foreground group"
             data-testid="link-home"
           >
-            <div className="rounded-2xl bg-gradient-to-br from-accent to-accent/80 p-2.5 shadow-lg shadow-accent/20 group-hover:shadow-accent/40 transition-all duration-300 group-hover:scale-110 relative overflow-hidden">
-              <div className="absolute inset-0 bg-white/20 animate-shimmer"></div>
-              <span className="text-accent-foreground font-bold text-lg relative z-10">AI</span>
+            <div className="relative">
+              <div className="absolute inset-0 bg-accent/30 blur-xl rounded-full animate-pulse"></div>
+              <div className="rounded-2xl bg-gradient-to-br from-accent via-yellow-400 to-accent p-3 shadow-2xl shadow-accent/40 group-hover:shadow-accent/60 transition-all duration-300 group-hover:scale-110 relative overflow-hidden border-2 border-accent/30">
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent animate-shimmer"></div>
+                <svg className="w-8 h-8 relative z-10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" className="text-accent-foreground"/>
+                  <circle cx="12" cy="12" r="3" fill="currentColor" className="text-accent-foreground opacity-80"/>
+                  <path d="M12 8V16M8 12H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-background"/>
+                </svg>
+              </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-accent group-hover:text-accent/90 transition-colors duration-300">AiRus</span>
-              <span className="text-[10px] text-muted-foreground -mt-1">ASSISTANT</span>
+              <span className="text-accent group-hover:text-accent/90 transition-colors duration-300 tracking-tight">AiRus</span>
+              <span className="text-[10px] text-accent/70 -mt-1 tracking-wider">YOUR AI COMPANION</span>
             </div>
           </Link>
 

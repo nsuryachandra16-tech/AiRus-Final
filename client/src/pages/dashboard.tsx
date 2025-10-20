@@ -60,23 +60,28 @@ export default function Dashboard() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 md:px-8 relative z-10">
-        {/* Hero Section */}
-        <div className="mb-12 text-center animate-fade-in-up">
+        {/* Header with Logo and AI Companion */}
+        <header className="mb-12 text-center animate-fade-in-up">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 backdrop-blur-sm">
-            <Sparkles className="h-4 w-4 text-accent animate-pulse" />
-            <span className="text-sm font-medium text-accent">Your Premium AI-Powered College Companion</span>
+            {/* Placeholder for a premium logo */}
+            <div className="w-6 h-6 flex items-center justify-center">
+              <svg className="w-full h-full text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <span className="text-sm font-medium text-accent">Your #1 Powerful AI Study Companion</span>
             <Sparkles className="h-4 w-4 text-accent animate-pulse" />
           </div>
           <h1 className="text-6xl md:text-7xl font-bold mb-4">
-            Welcome to
+            Meet
           </h1>
           <h1 className="text-6xl md:text-7xl font-bold text-accent mb-4 animate-gradient-text">
             AiRus
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Your academic journey, powered by intelligence ✨
+            Unlock your academic potential with premium, 100% working AI-powered study tools ✨
           </p>
-        </div>
+        </header>
 
         {/* Stats Section */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">

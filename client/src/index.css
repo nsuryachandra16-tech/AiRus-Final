@@ -302,11 +302,20 @@
   }
 
   @keyframes shimmer {
-    0% {
-      background-position: -1000px 0;
+    0%, 100% {
+      opacity: 0.5;
     }
-    100% {
-      background-position: 1000px 0;
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
     }
   }
 
@@ -327,17 +336,11 @@
   }
 
   .animate-gradient-text {
-    animation: gradient-text 3s ease-in-out infinite;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
   }
 
   .animate-shimmer {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(250, 204, 21, 0.1) 50%,
-      transparent 100%
-    );
-    background-size: 1000px 100%;
     animation: shimmer 2s infinite;
   }
 
