@@ -242,7 +242,7 @@ export default function Dashboard() {
 
 
         {/* Footer Credit */}
-        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+        <div className="text-center mt-16 pb-8 animate-fade-in" style={{ animationDelay: '0.5s' }}>
           <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
             Crafted with <span className="text-red-500 animate-pulse">❤️</span> by Surya
           </p>

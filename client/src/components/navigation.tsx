@@ -13,7 +13,11 @@ const navItems = [
   { path: "/timetable", label: "Timetable", icon: Upload },
 ];
 
-export function Navigation() {
+interface NavigationProps {
+  userName: string;
+}
+
+export function Navigation({ userName }: NavigationProps) {
   const [location] = useLocation();
 
   return (
@@ -38,6 +42,12 @@ export function Navigation() {
               <span className="text-[10px] text-muted-foreground -mt-1">ASSISTANT</span>
             </div>
           </Link>
+
+          {/* User Greeting */}
+          <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-accent/10 border border-accent/20">
+            <span className="text-sm text-muted-foreground">Hey,</span>
+            <span className="text-sm font-semibold text-accent">{userName}</span>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden items-center gap-2 md:flex">
@@ -77,7 +87,11 @@ export function Navigation() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-64 bg-card border-card-border">
-              <div className="flex flex-col gap-2 pt-8">
+              <div className="mb-6 p-4 rounded-xl bg-accent/10 border border-accent/20 text-center">
+                <span className="text-sm text-muted-foreground">Hey, </span>
+                <span className="text-sm font-semibold text-accent">{userName}</span>
+              </div>
+              <div className="flex flex-col gap-2 pt-2">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = location === item.path;
