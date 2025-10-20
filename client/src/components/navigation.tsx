@@ -18,25 +18,29 @@ export function Navigation() {
 
   return (
     <nav
-      className="sticky top-0 z-50 border-b border-white/5 backdrop-blur-[12px]"
-      style={{ background: "rgba(10, 10, 10, 0.25)" }}
+      className="sticky top-0 z-50 border-b border-accent/10 backdrop-blur-[12px] shadow-lg shadow-accent/5"
+      style={{ background: "rgba(10, 10, 10, 0.8)" }}
     >
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 text-xl font-bold text-foreground"
+            className="flex items-center gap-3 text-xl font-bold text-foreground group"
             data-testid="link-home"
           >
-            <div className="rounded-lg bg-accent p-2">
-              <span className="text-accent-foreground">AI</span>
+            <div className="rounded-2xl bg-gradient-to-br from-accent to-accent/80 p-2.5 shadow-lg shadow-accent/20 group-hover:shadow-accent/40 transition-all duration-300 group-hover:scale-110 relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/20 animate-shimmer"></div>
+              <span className="text-accent-foreground font-bold text-lg relative z-10">AI</span>
             </div>
-            <span>AiRus</span>
+            <div className="flex flex-col">
+              <span className="text-accent group-hover:text-accent/90 transition-colors duration-300">AiRus</span>
+              <span className="text-[10px] text-muted-foreground -mt-1">ASSISTANT</span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center gap-1 md:flex">
+          <div className="hidden items-center gap-2 md:flex">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location === item.path;
@@ -45,16 +49,21 @@ export function Navigation() {
                   key={item.path}
                   href={item.path}
                   className={cn(
-                    "flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
-                    "hover-elevate active-elevate-2",
+                    "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 relative overflow-hidden group",
                     isActive
-                      ? "border-b-2 border-accent text-accent"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "text-accent bg-accent/10 border border-accent/30 shadow-lg shadow-accent/10"
+                      : "text-muted-foreground hover:text-accent hover:bg-accent/5 border border-transparent hover:border-accent/20"
                   )}
                   data-testid={`link-${item.label.toLowerCase().replace(" ", "-")}`}
                 >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-accent/10 via-accent/5 to-transparent animate-shimmer"></div>
+                  )}
+                  <Icon className={cn(
+                    "h-5 w-5 transition-transform duration-300 relative z-10",
+                    isActive ? "text-accent scale-110" : "group-hover:scale-110"
+                  )} />
+                  <span className="relative z-10">{item.label}</span>
                 </Link>
               );
             })}

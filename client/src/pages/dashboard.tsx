@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { GlassCard } from "@/components/glass-card";
-import { ClipboardList, Calendar, Timer, TrendingUp } from "lucide-react";
+import { ClipboardList, Clock, Calendar, TrendingUp, Sparkles } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { format, formatDistanceToNow, isAfter, isBefore, addDays } from "date-fns";
@@ -52,19 +52,34 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-12 pt-6">
-      <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground" data-testid="text-page-title">
-            Dashboard
+    <div className="min-h-screen bg-background pb-12 pt-6 relative overflow-hidden">
+      {/* Animated background gradients */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-accent/5 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-accent/5 rounded-full blur-3xl animate-pulse-slow-delay"></div>
+      </div>
+
+      <div className="mx-auto max-w-7xl px-4 md:px-8 relative z-10">
+        {/* Hero Section */}
+        <div className="mb-12 text-center animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 backdrop-blur-sm">
+            <Sparkles className="h-4 w-4 text-accent animate-pulse" />
+            <span className="text-sm font-medium text-accent">Your Premium AI-Powered College Companion</span>
+            <Sparkles className="h-4 w-4 text-accent animate-pulse" />
+          </div>
+          <h1 className="text-6xl md:text-7xl font-bold mb-4">
+            Welcome to
           </h1>
-          <p className="mt-2 text-muted-foreground">
-            Welcome back! Here's your academic overview.
+          <h1 className="text-6xl md:text-7xl font-bold text-accent mb-4 animate-gradient-text">
+            AiRus
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Your academic journey, powered by intelligence ✨
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Stats Section */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
           <GlassCard className="p-6" hover>
             <div className="flex items-start justify-between">
               <div>
@@ -181,6 +196,13 @@ export default function Dashboard() {
             </div>
           )}
         </GlassCard>
+
+        {/* Footer Credit */}
+        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.5s' }}>
+          <p className="text-sm text-muted-foreground flex items-center justify-center gap-1">
+            Crafted with <span className="text-red-500 animate-pulse">❤️</span> by Surya
+          </p>
+        </div>
       </div>
     </div>
   );
