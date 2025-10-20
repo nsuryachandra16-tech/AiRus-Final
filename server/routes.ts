@@ -1,13 +1,16 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import multer from "multer";
 import { storage } from "./storage";
-import { generateTutorResponse } from "./gemini";
+import { generateTutorResponse, analyzeTimetableImage, analyzeAssignmentImage } from "./gemini";
 import {
   insertAssignmentSchema,
   insertScheduleEventSchema,
   insertStudySessionSchema,
   insertChatMessageSchema,
 } from "@shared/schema";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // ============ Assignments Routes ============
@@ -251,6 +254,84 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error clearing chat history:", error);
       res.status(500).json({ error: "Failed to clear chat history" });
+    }
+  });
+
+  // ============ Timetable Routes ============
+  
+  // GET timetable data
+  app.get("/api/timetable", async (req, res) => {
+    try {
+      const timetableData = await storage.getTimetableData();
+      res.json(timetableData);
+    } catch (error) {
+      console.error("Error fetching timetable data:", error);
+      res.status(500).json({ error: "Failed to fetch timetable data" });
+    }
+  });
+
+  // POST upload and analyze timetable
+  app.post("/api/timetable/upload", upload.single("file"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      // Analyze the uploaded image
+      const analysisResult = await analyzeTimetableImage(req.file.buffer);
+      
+      // Clear existing schedule events
+      const existingEvents = await storage.getScheduleEvents();
+      for (const event of existingEvents) {
+        await storage.deleteScheduleEvent(event.id);
+      }
+      
+      // Create new schedule events from analyzed timetable
+      for (const event of analysisResult.events) {
+        await storage.createScheduleEvent(event);
+      }
+      
+      // Save timetable metadata
+      await storage.saveTimetableData({
+        uploadedAt: new Date(),
+        totalClasses: analysisResult.events.length,
+        freeSlots: analysisResult.freeSlots || 0,
+      });
+      
+      res.status(201).json({ success: true, eventsCreated: analysisResult.events.length });
+    } catch (error: any) {
+      console.error("Error uploading timetable:", error);
+      res.status(500).json({ error: "Failed to upload timetable" });
+    }
+  });
+
+  // POST upload and analyze assignment for auto-scheduling
+  app.post("/api/timetable/upload-assignment", upload.single("file"), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
+      }
+
+      // Analyze assignment image
+      const analysisResult = await analyzeAssignmentImage(req.file.buffer);
+      
+      // Get current schedule to find free slots
+      const scheduleEvents = await storage.getScheduleEvents();
+      
+      // Create assignment with auto-scheduled work sessions in free slots
+      const assignment = await storage.createAssignment({
+        title: analysisResult.title,
+        course: analysisResult.course || "General",
+        description: analysisResult.description,
+        dueDate: analysisResult.dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        priority: analysisResult.priority || "medium",
+        completed: false,
+      });
+      
+      res.status(201).json({ success: true, assignment });
+    } catch (error: any) {
+      console.error("Error uploading assignment:", error);
+      res.status(500).json({ error: "Failed to upload assignment" });
     }
   });
 

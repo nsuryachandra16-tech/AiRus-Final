@@ -38,6 +38,10 @@ export interface IStorage {
   getChatMessages(): Promise<ChatMessage[]>;
   createChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
   clearChatHistory(): Promise<boolean>;
+  
+  // Timetable Data
+  getTimetableData(): Promise<any>;
+  saveTimetableData(data: any): Promise<any>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -140,6 +144,18 @@ export class DatabaseStorage implements IStorage {
   async clearChatHistory(): Promise<boolean> {
     await db.delete(chatMessages);
     return true;
+  }
+
+  // Timetable Data (stored in memory for now, can be moved to DB if needed)
+  private timetableData: any = null;
+
+  async getTimetableData(): Promise<any> {
+    return this.timetableData;
+  }
+
+  async saveTimetableData(data: any): Promise<any> {
+    this.timetableData = data;
+    return this.timetableData;
   }
 }
 

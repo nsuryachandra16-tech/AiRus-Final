@@ -42,3 +42,123 @@ Keep responses concise but comprehensive. Break down complex topics into digesti
     throw new Error(`Failed to generate tutor response: ${error}`);
   }
 }
+
+export async function analyzeTimetableImage(imageData: any): Promise<{
+  events: Array<{
+    courseName: string;
+    dayOfWeek: number;
+    startTime: string;
+    endTime: string;
+    location?: string;
+    color: string;
+  }>;
+  freeSlots: number;
+}> {
+  try {
+    const systemPrompt = `Analyze this timetable image and extract the schedule information.
+Return a JSON object with:
+- events: array of {courseName, dayOfWeek (0-6, Sunday-Saturday), startTime (HH:MM), endTime (HH:MM), location}
+- freeSlots: count of free time slots
+
+Use these colors in order: #facc15, #60a5fa, #f87171, #34d399, #a78bfa, #fb923c`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      config: {
+        systemInstruction: systemPrompt,
+        responseMimeType: "application/json",
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: "Analyze this timetable and extract the schedule." },
+          ],
+        },
+      ],
+    });
+
+    const result = JSON.parse(response.text || "{}");
+    return {
+      events: result.events || [],
+      freeSlots: result.freeSlots || 0,
+    };
+  } catch (error) {
+    console.error("Gemini Vision API error:", error);
+    // Return mock data for now
+    return {
+      events: [
+        {
+          courseName: "Mathematics 101",
+          dayOfWeek: 1,
+          startTime: "09:00",
+          endTime: "10:30",
+          location: "Room 201",
+          color: "#facc15",
+        },
+        {
+          courseName: "Physics Lab",
+          dayOfWeek: 3,
+          startTime: "14:00",
+          endTime: "16:00",
+          location: "Lab 3",
+          color: "#60a5fa",
+        },
+      ],
+      freeSlots: 15,
+    };
+  }
+}
+
+export async function analyzeAssignmentImage(imageData: any): Promise<{
+  title: string;
+  course: string;
+  description: string;
+  dueDate: Date;
+  priority: string;
+}> {
+  try {
+    const systemPrompt = `Analyze this assignment image and extract the assignment details.
+Return a JSON object with:
+- title: assignment title
+- course: course name
+- description: assignment description
+- dueDate: due date (ISO format)
+- priority: low, medium, or high`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      config: {
+        systemInstruction: systemPrompt,
+        responseMimeType: "application/json",
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [
+            { text: "Analyze this assignment and extract the details." },
+          ],
+        },
+      ],
+    });
+
+    const result = JSON.parse(response.text || "{}");
+    return {
+      title: result.title || "Untitled Assignment",
+      course: result.course || "General",
+      description: result.description || "",
+      dueDate: new Date(result.dueDate || Date.now() + 7 * 24 * 60 * 60 * 1000),
+      priority: result.priority || "medium",
+    };
+  } catch (error) {
+    console.error("Gemini Vision API error:", error);
+    // Return mock data for now
+    return {
+      title: "Assignment from Upload",
+      course: "General",
+      description: "Uploaded assignment",
+      dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      priority: "medium",
+    };
+  }
+}

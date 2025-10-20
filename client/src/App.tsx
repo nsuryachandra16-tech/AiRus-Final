@@ -9,6 +9,7 @@ import Assignments from "@/pages/assignments";
 import Schedule from "@/pages/schedule";
 import StudyTimer from "@/pages/study-timer";
 import AITutor from "@/pages/ai-tutor";
+import Timetable from "@/pages/timetable";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/schedule" component={Schedule} />
         <Route path="/study" component={StudyTimer} />
         <Route path="/tutor" component={AITutor} />
+        <Route path="/timetable" component={Timetable} />
         <Route component={NotFound} />
       </Switch>
     </>

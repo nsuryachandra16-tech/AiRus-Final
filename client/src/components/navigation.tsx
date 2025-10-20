@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, ClipboardList, Calendar, Timer, MessageSquare, Menu } from "lucide-react";
+import { LayoutDashboard, ClipboardList, Calendar, Timer, MessageSquare, Menu, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ const navItems = [
   { path: "/schedule", label: "Schedule", icon: Calendar },
   { path: "/study", label: "Study", icon: Timer },
   { path: "/tutor", label: "AI Tutor", icon: MessageSquare },
+  { path: "/timetable", label: "Timetable", icon: Upload },
 ];
 
 export function Navigation() {
