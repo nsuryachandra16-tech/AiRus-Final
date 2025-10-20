@@ -38,7 +38,7 @@ export default function Dashboard() {
   const now = new Date();
   const currentDay = now.getDay();
   const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-  
+
   const todayClasses = scheduleEvents
     .filter((event: any) => event.dayOfWeek === currentDay)
     .sort((a: any, b: any) => a.startTime.localeCompare(b.startTime));
