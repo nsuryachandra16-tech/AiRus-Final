@@ -1,8 +1,34 @@
 // Using the javascript_gemini blueprint
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 if (!process.env.GEMINI_API_KEY) {
   throw new Error("GEMINI_API_KEY must be set");
+}
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+export async function generateTutorResponse(conversationHistory: Array<{ role: string; content: string }>): Promise<string> {
+  try {
+    // Build the conversation context
+    const context = conversationHistory
+      .map((msg) => `${msg.role === "user" ? "Student" : "Tutor"}: ${msg.content}`)
+      .join("\n");
+
+    const prompt = `You are an expert AI tutor helping college students with their studies. You are knowledgeable, patient, and encouraging. Provide clear, concise explanations and help students understand concepts deeply.
+
+Previous conversation:
+${context}
+
+Provide a helpful, educational response as the AI Tutor:`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Error generating AI response:", error);
+    throw new Error("Failed to generate AI response");
+  }
 }
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
